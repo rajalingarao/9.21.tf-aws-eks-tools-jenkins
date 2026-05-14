@@ -28,6 +28,8 @@ resource "aws_instance" "jenkins_agent" {
   subnet_id              = "subnet-0ea9a2005fdcc6695" 
   user_data               = file("${path.module}/install_jenkins_agent.sh")
 
+  iam_instance_profile   = aws_iam_instance_profile.profile.name
+   
   # Define the root volume size and type
   root_block_device  {
     encrypted             = false
@@ -42,6 +44,11 @@ resource "aws_instance" "jenkins_agent" {
     Name   = "Jenkins-Agent"
   }
 }
+resource "aws_iam_instance_profile" "profile" {
+  name = "k8s-instance-profile"
+  role = "k8s-iam-role-authentication"      
+}
+
 
 # resource "aws_key_pair" "tools" {
 #     key_name = "tools-key"
